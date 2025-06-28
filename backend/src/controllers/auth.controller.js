@@ -29,14 +29,16 @@ export const signup = async(req, res)=> {
     res.status(201).json({
       _id:newUser._id,
       fullname: newUser.fullName,
-      email: newUser.email
-  })
+      email: newUser.email,
+      profilePic: newUser.profilePic
+  });
 
   } else {
     res.status(400).json({ message: "Invalid usesr data"});
   }
     } catch (error) {
-        
+        console.log("Error in signup controller", error.message);
+        res.status(500).json({message: "Internal Server Error"})
     }
 };
 
