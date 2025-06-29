@@ -1,5 +1,6 @@
-import User from "..models/user.model.js";
+import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
+import { generateToken } from "../lib/utils.js";
 
 export const signup = async(req, res)=> {
     const{fullName, email, password} = req.body
@@ -37,7 +38,7 @@ export const signup = async(req, res)=> {
   });
 
   } else {
-    res.status(400).json({ message: "Invalid usesr data"});
+    res.status(400).json({ message: "Invalid user data"});
   }
     } catch (error) {
         console.log("Error in signup controller", error.message);
@@ -46,7 +47,12 @@ export const signup = async(req, res)=> {
 };
 
 export const login = (req, res)=> {
-    res.send("login route")
+  const  {email, password} = req.body
+    try {
+      const user = await User.findOne
+    } catch (error) {
+      
+    }
 }
 
 export const logout = (req, res)=> {
