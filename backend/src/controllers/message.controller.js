@@ -24,5 +24,5 @@ export const getMessages = async(req,res) => {
     } catch (error) {
         
     }
-}
+};
 
