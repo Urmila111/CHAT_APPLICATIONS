@@ -59,9 +59,9 @@ export const login = async(req, res)=> {
         return res.status(400).json({message: "Invalid Credentials"})
       }
 
-      generateToken(user.__id, res)
+      generateToken(user._id, res)
       res.status(200).json({
-        __id: user.__id,
+        _id: user._id,
         fullName: user.fullName,
         email: user.email,
         profilePic: user.profilePic,
@@ -112,4 +112,4 @@ export const checkAuth = (req,res) => {
     res.status(500).json({message: "Internal Server Error"});
     
   }
-}
+};
