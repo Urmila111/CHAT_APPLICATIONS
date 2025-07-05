@@ -19,11 +19,20 @@ export const getMessages = async(req,res) => {
        const {id: userToChatId} = req.params
        const senderId = req.user.__id;
 
-       const messages = await Message
+       const messages = await Message.find({
+        $or: [
+          { sender: senderId, receiver: userToChatId },
+          { sender: userToChatId, receiver: senderId }
+        ]
+       })
+
+       res.status(200).json(messages);
 
     } catch (error) {
-        
+        console.log("Error in getMessages: ", error.message);
+        res.status(500).json({error: "Internal server error"});
     }
+
 };
 
 export const sendMessage = async(req, res)=>{
@@ -35,17 +44,27 @@ export const sendMessage = async(req, res)=>{
     let imageUrl;
     if (image) {
       //Upload image to cloudinary 
-      const uploadResponse = await cloudinary.uploader.upload(image, {
-        folder: "chat_app",
-        resource_type: "image",
-      });
-      imageUrl = image; // Placeholder for actual image upload logic
+      const uploadResponse = await cloudinary.uploader.upload(image);
+      imageUrl = uploadResponse.secure_url;
     }
-    // Add your message sending logic here
+    const newMessage = await Message.create({
+      text,
+      image: imageUrl,
+      sender: senderId,
+      receiver: receiverId
+    });
+
+    await newMessage.save();
+    
+    // todo: realtime functionality goes here => socket.io
+
+    res.status(201).json(newMessage);
+    
   } catch (error) {
-    // Handle error here
+    console.log("Error in sendMessage: ", error.message);
+    res.status(500).json({error: "Internal server error"});
   }
-}
+};
 
 
 
